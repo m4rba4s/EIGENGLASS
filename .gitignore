@@ -1,0 +1,16 @@
+# Build artifacts
+build/
+*.o
+math_tests
+concurrency_tests
+math_ast_tests
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

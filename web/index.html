@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOM — The Visual Calculus Engine</title>
+    <meta name="description" content="Interactive matrix and calculus visualization laboratory for students. Explore linear transformations, eigenvectors, and vector fields in real-time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header Bar -->
+        <header id="header">
+            <div class="logo">
+                <span class="logo-icon">◈</span>
+                <span class="logo-text">AXIOM</span>
+                <span class="logo-sub">Visual Calculus Engine</span>
+            </div>
+            <div class="header-controls">
+                <div class="mode-switcher" id="mode-switcher">
+                    <button class="mode-btn active" data-mode="transform" id="btn-mode-transform">Matrix Transform</button>
+                    <button class="mode-btn" data-mode="field" id="btn-mode-field">Vector Field</button>
+                    <button class="mode-btn" data-mode="eigen" id="btn-mode-eigen">Eigenvectors</button>
+                    <button class="mode-btn" data-mode="3d" id="btn-mode-3d">3D Space</button>
+                    <button class="mode-btn" data-mode="attractor" id="btn-mode-attractor">3D Attractor</button>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-layout">
+            <!-- Left Panel: Controls -->
+            <aside id="panel-left">
+                <!-- Matrix Input -->
+                <section class="panel-section" id="section-matrix">
+                    <h2 class="section-title">
+                        <span class="section-icon">⊞</span>
+                        Transformation Matrix
+                    </h2>
+                    <div class="matrix-grid" id="matrix-grid">
+                        <input type="number" class="matrix-cell" id="m00" value="1" step="0.1">
+                        <input type="number" class="matrix-cell" id="m01" value="0" step="0.1">
+                        <input type="number" class="matrix-cell" id="m10" value="0" step="0.1">
+                        <input type="number" class="matrix-cell" id="m11" value="1" step="0.1">
+                    </div>
+                    <button class="anim-btn" id="btn-inject-nan" style="width: 100%; margin-bottom: 15px; background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #fca5a5;">☠ Inject NaN Poison</button>
+                    <div class="matrix-info" id="matrix-info">
+                        <div class="info-row">
+                            <span class="info-label">det(A)</span>
+                            <span class="info-value" id="det-value">1.000</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">trace(A)</span>
+                            <span class="info-value" id="trace-value">2.000</span>
+                        </div>
+                        <div class="info-row" id="singularity-warning" style="display:none;">
+                            <span class="info-label singular">⚠ SINGULAR</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3x3 Matrix Input (3D Mode) -->
+                <section class="panel-section" id="section-matrix-3d" style="display:none;">
+                    <h2 class="section-title">
+                        <span class="section-icon">⊞</span>
+                        3D Transformation
+                    </h2>
+                    <div class="matrix-grid-3x3" id="matrix-grid-3d">
+                        <input type="number" class="matrix-cell" id="m3d00" value="1" step="0.1">
+                        <input type="number" class="matrix-cell" id="m3d01" value="0" step="0.1">
+                        <input type="number" class="matrix-cell" id="m3d02" value="0" step="0.1">
+                        
+                        <input type="number" class="matrix-cell" id="m3d10" value="0" step="0.1">
+                        <input type="number" class="matrix-cell" id="m3d11" value="1" step="0.1">
+                        <input type="number" class="matrix-cell" id="m3d12" value="0" step="0.1">
+                        
+                        <input type="number" class="matrix-cell" id="m3d20" value="0" step="0.1">
+                        <input type="number" class="matrix-cell" id="m3d21" value="0" step="0.1">
+                        <input type="number" class="matrix-cell" id="m3d22" value="1" step="0.1">
+                    </div>
+                </section>
+
+                <!-- Formula Input (Vector Field mode) -->
+                <section class="panel-section" id="section-formula" style="display:none;">
+                    <h2 class="section-title">
+                        <span class="section-icon">ƒ</span>
+                        Vector Field
+                    </h2>
+                    <div class="formula-inputs">
+                        <label class="formula-label">dx/dt =</label>
+                        <input type="text" class="formula-input" id="formula-dx" value="-y + x * 0.1" placeholder="e.g. -y + x*0.1">
+                        <label class="formula-label">dy/dt =</label>
+                        <input type="text" class="formula-input" id="formula-dy" value="x + y * 0.1" placeholder="e.g. x + y*0.1">
+                    </div>
+                </section>
+
+                <!-- Attractor Parameters (3D Attractor Mode) -->
+                <section class="panel-section" id="section-attractor" style="display:none;">
+                    <h2 class="section-title">
+                        <span class="section-icon">🌀</span>
+                        Lorenz Attractor
+                    </h2>
+                    <div class="formula-inputs">
+                        <label class="formula-label">σ (Sigma) =</label>
+                        <input type="number" class="formula-input" id="attr-sigma" value="10" step="0.1">
+                        <label class="formula-label">ρ (Rho) =</label>
+                        <input type="number" class="formula-input" id="attr-rho" value="28" step="0.1">
+                        <label class="formula-label">β (Beta) =</label>
+                        <input type="number" class="formula-input" id="attr-beta" value="2.666" step="0.001">
+                        <label class="formula-label">dt =</label>
+                        <input type="number" class="formula-input" id="attr-dt" value="0.01" step="0.001">
+                        <button class="anim-btn" id="btn-reset-attractor" style="margin-top: 10px;">↺ Restart Trace</button>
+                    </div>
+                </section>
+
+                <!-- Presets -->
+                <section class="panel-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">◇</span>
+                        Presets
+                    </h2>
+                    <div class="presets-grid" id="presets-grid">
+                        <button class="preset-btn" data-preset="identity" id="preset-identity">Identity</button>
+                        <button class="preset-btn" data-preset="rotate45" id="preset-rotate">Rotate 45°</button>
+                        <button class="preset-btn" data-preset="shear" id="preset-shear">Shear</button>
+                        <button class="preset-btn" data-preset="scale" id="preset-scale">Scale ×2</button>
+                        <button class="preset-btn" data-preset="reflect" id="preset-reflect">Reflect Y</button>
+                        <button class="preset-btn" data-preset="singular" id="preset-singular">Singular</button>
+                    </div>
+                </section>
+
+                <!-- Animation Controls -->
+                <section class="panel-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">▶</span>
+                        Animation
+                    </h2>
+                    <div class="slider-group">
+                        <label class="slider-label">Interpolation t</label>
+                        <input type="range" class="slider" id="slider-t" min="0" max="1" step="0.01" value="1">
+                        <span class="slider-value" id="slider-t-value">1.00</span>
+                    </div>
+                    <div class="anim-buttons">
+                        <button class="anim-btn" id="btn-animate">▶ Animate</button>
+                        <button class="anim-btn" id="btn-reset">↺ Reset</button>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Center: Canvas -->
+            <div id="canvas-container">
+                <canvas id="main-canvas"></canvas>
+                <canvas id="webgl-canvas" style="display:none;"></canvas>
+                <!-- Telemetry HUD -->
+                <div id="telemetry-hud">
+                    <div class="hud-item">
+                        <span class="hud-label">FPS</span>
+                        <span class="hud-value" id="hud-fps">60</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-label">Points</span>
+                        <span class="hud-value" id="hud-points">441</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-label">Frame</span>
+                        <span class="hud-value" id="hud-frame">0.0ms</span>
+                    </div>
+                </div>
+                <!-- Coordinate tooltip -->
+                <div id="coord-tooltip" style="display:none;"></div>
+            </div>
+
+            <!-- Right Panel: Eigenvalue / Info -->
+            <aside id="panel-right">
+                <section class="panel-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">λ</span>
+                        Eigenanalysis
+                    </h2>
+                    <div id="eigen-display">
+                        <div class="eigen-item">
+                            <span class="eigen-label">λ₁</span>
+                            <span class="eigen-value" id="eigen-val1">—</span>
+                        </div>
+                        <div class="eigen-item">
+                            <span class="eigen-label">λ₂</span>
+                            <span class="eigen-value" id="eigen-val2">—</span>
+                        </div>
+                        <div class="eigen-item">
+                            <span class="eigen-label">v₁</span>
+                            <span class="eigen-value" id="eigen-vec1">—</span>
+                        </div>
+                        <div class="eigen-item">
+                            <span class="eigen-label">v₂</span>
+                            <span class="eigen-value" id="eigen-vec2">—</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📐</span>
+                        Properties
+                    </h2>
+                    <div id="properties-display">
+                        <div class="prop-item">
+                            <span class="prop-label">Type</span>
+                            <span class="prop-value" id="prop-type">—</span>
+                        </div>
+                        <div class="prop-item">
+                            <span class="prop-label">Area Factor</span>
+                            <span class="prop-value" id="prop-area">—</span>
+                        </div>
+                        <div class="prop-item">
+                            <span class="prop-label">Orientation</span>
+                            <span class="prop-value" id="prop-orient">—</span>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </main>
+    </div>
+
+    <script src="webgl.js"></script>
+    <script src="engine.js"></script>
+</body>
+</html>
