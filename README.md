@@ -1,5 +1,3 @@
-<![CDATA[<div align="center">
-
 # ◈ EIGENGLASS — Linear Algebra & Chaos Laboratory
 
 **An interactive, hardware-aware mathematical laboratory for exploring linear algebra, chaos theory, and differential equations.**
@@ -11,11 +9,9 @@
 
 *Built from scratch. No frameworks. No dependencies. Just math, metal, and pixels.*
 
-</div>
-
 ---
 
-## 🎯 What is EIGENGLASS?
+## What is EIGENGLASS?
 
 EIGENGLASS bridges the gap between **abstract mathematics** and **low-level hardware execution**. It's a dual-layer engine:
 
@@ -28,9 +24,9 @@ Students don't just *read* about eigenvalues — they **drag basis vectors with 
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🔢 2D Matrix Transforms
+###  2D Matrix Transforms
 - Interactive 2×2 matrix with real-time grid deformation
 - **Drag-and-drop basis vectors** (î, ĵ) — the matrix is the columns
 - Live determinant, trace, eigenvalue computation
@@ -41,18 +37,18 @@ Students don't just *read* about eigenvalues — they **drag basis vectors with 
 - Visual proof: eigenvectors stay on their span under transformation
 - Complex eigenvalue detection (rotation matrices)
 
-### 🌊 Vector Fields
+###  Vector Fields
 - Custom formula input: `dx/dt = f(x, y, t)`
 - 800 flowing particles tracing the ODE
 - NaN-safe evaluation with red poison indicators
 
-### 🌐 3D Space (WebGL)
+###  3D Space (WebGL)
 - Full 3×3 matrix transforms in 3D
 - Hand-written mat4 library (perspective, lookAt, multiply)
 - Orbit camera (mouse drag + scroll zoom)
 - Dual-plane grid (XZ ground + XY wall)
 
-### 🌀 Lorenz Attractor (RK4)
+###  Lorenz Attractor (RK4)
 - **Runge-Kutta 4th order** ODE integrator
 - Real-time 3D butterfly trace with up to 10,000 points
 - Adjustable parameters: σ (Prandtl), ρ (Rayleigh), β
@@ -65,7 +61,7 @@ Students don't just *read* about eigenvalues — they **drag basis vectors with 
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 EIGENGLASS Engine
@@ -133,7 +129,7 @@ All **41 assertions** across 11 test cases pass.
 
 ---
 
-## 🧮 The Math
+##  The Math
 
 ### RK4 Integration (Lorenz System)
 
@@ -157,7 +153,7 @@ EIGENGLASS demonstrates IEEE 754 arithmetic's poison property: any operation inv
 
 ---
 
-## 📐 Testing Invariants
+##  Testing Invariants
 
 | Test | Assertion | Tolerance |
 |------|-----------|-----------|
@@ -172,7 +168,7 @@ EIGENGLASS demonstrates IEEE 754 arithmetic's poison property: any operation inv
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **C++20** — Concepts, constexpr, structured bindings
 - **SIMD** — AVX2 (`_mm256_*`) for SoA batch ops, SSE4.2 for matrix multiply
@@ -183,7 +179,7 @@ EIGENGLASS demonstrates IEEE 754 arithmetic's poison property: any operation inv
 
 ---
 
-## 📖 Documentation
+##  Documentation
 
 The `docs/` directory contains 9 detailed design documents:
 
@@ -201,7 +197,7 @@ The `docs/` directory contains 9 detailed design documents:
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
 - [x] **Phase 1** — Memory & SIMD Math Core
 - [x] **Phase 2** — Lock-Free Concurrency
@@ -215,18 +211,15 @@ The `docs/` directory contains 9 detailed design documents:
 
 ---
 
-## 📄 License
+##  License
 
 MIT — do whatever you want, just keep the math correct.
 
 ---
 
-<div align="center">
 
 *Built with obsessive attention to detail by researchers who believe*
 *the best way to understand mathematics is to break it.*
 
 **◈ EIGENGLASS** — *Where linear algebra meets bare metal.*
 
-</div>
-]]>
